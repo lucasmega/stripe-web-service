@@ -4,8 +4,8 @@ public class Card {
     private String brand;
     private Checks checks;
     private String country;
-    private Integer expMonth;
-    private Integer expYear;
+    private Long expMonth;
+    private Long expYear;
     private String fingerprint;
     private String funding;
     private String generatedFrom;
@@ -13,6 +13,26 @@ public class Card {
     private Networks networks;
     private ThreeDSecureUsage threeDSecureUsage;
     private String wallet;
+
+    private String cvc;
+
+    private String cardNumber;
+
+    public String getCvc() {
+        return cvc;
+    }
+
+    public void setCvc(String cvc) {
+        this.cvc = cvc;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
 
     public String getBrand() {
         return brand;
@@ -38,19 +58,19 @@ public class Card {
         this.country = country;
     }
 
-    public Integer getExpMonth() {
+    public Long getExpMonth() {
         return expMonth;
     }
 
-    public void setExpMonth(Integer expMonth) {
+    public void setExpMonth(Long expMonth) {
         this.expMonth = expMonth;
     }
 
-    public Integer getExpYear() {
+    public Long getExpYear() {
         return expYear;
     }
 
-    public void setExpYear(Integer expYear) {
+    public void setExpYear(Long expYear) {
         this.expYear = expYear;
     }
 

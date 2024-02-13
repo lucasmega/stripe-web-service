@@ -2,6 +2,7 @@ package com.cutconnect.controllers;
 
 
 
+import com.cutconnect.domains.CheckoutPayment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,8 +11,9 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cutconnect.services.PaymentStripeService;
+import com.cutconnect.domains.PaymentMethod;
 import com.cutconnect.domains.CheckoutSession;
+import com.cutconnect.services.PaymentStripeService;
 import com.cutconnect.services.CustomerStripeService;
 
 import java.util.Map;
@@ -58,9 +60,19 @@ public class PaymentStripeController {
     }
 
     @PostMapping("/create-payment-with-card")
-    public ResponseEntity<Map<String, Object>> createPaymentWithCard(@RequestBody Long amount) {
+    public ResponseEntity<Map<String, Object>> createPaymentWithCard(@RequestBody PaymentMethod paymentMethod) {
         try {
-            return ResponseEntity.ok(paymentStripeService.createPaymentWithCard());
+            return ResponseEntity.ok(paymentStripeService.createPaymentWithCard(paymentMethod));
+        } catch (Exception e) {
+            logger.error("Erro ao receber pagamento: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/one-time-payment")
+    public ResponseEntity<Map<String, String>> paymentWithCheckoutPage(@RequestBody CheckoutPayment checkoutPayment) {
+        try {
+            return ResponseEntity.ok(paymentStripeService.paymentWithCheckoutPage(checkoutPayment));
         } catch (Exception e) {
             logger.error("Erro ao receber pagamento: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

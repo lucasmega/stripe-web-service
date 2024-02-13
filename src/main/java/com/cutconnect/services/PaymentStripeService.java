@@ -1,21 +1,26 @@
 package com.cutconnect.services;
 
-import com.stripe.model.PaymentIntent;
-import com.stripe.model.PaymentMethod;
-import com.stripe.param.PaymentIntentCreateParams;
+import com.cutconnect.domains.CheckoutPayment;
 import com.stripe.Stripe;
-import com.stripe.exception.StripeException;
 import com.stripe.model.Event;
 import com.stripe.net.Webhook;
-import com.stripe.param.PaymentMethodCreateParams;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import com.stripe.model.checkout.Session;
+import com.stripe.exception.StripeException;
+import com.stripe.param.PaymentIntentCreateParams;
+import com.stripe.param.PaymentMethodCreateParams;
+import org.springframework.stereotype.Service;
 import com.stripe.param.checkout.SessionCreateParams;
-import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.HashMap;
+import static spark.Spark.staticFiles;
+
+import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.Map;
+import java.util.HashMap;
+
+import com.stripe.model.PaymentIntent;
+import com.cutconnect.domains.PaymentMethod;
 
 
 @Service
@@ -53,8 +58,29 @@ public class PaymentStripeService {
     public RedirectView createCheckoutSession(String priceId, Long quantity) throws StripeException {
         Stripe.apiKey = stripeKey;
 
+        staticFiles.externalLocation("public");
+
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
+                .setSuccessUrl(domain + "/success")
+                .setCancelUrl(domain + "/cancel")
+                .addLineItem(
+                        SessionCreateParams.LineItem.builder()
+                                .setQuantity(quantity)
+                                .setPrice(priceId)
+                                .build()
+                ).build();
+        Session session = Session.create(params);
+        return new RedirectView(session.getUrl());
+    }
+
+    public RedirectView createCheckoutSessionSubscription(String priceId, Long quantity) throws StripeException {
+        Stripe.apiKey = stripeKey;
+
+        staticFiles.externalLocation("public");
+
+        SessionCreateParams params = SessionCreateParams.builder()
+                .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
                 .setSuccessUrl(domain + "/success")
                 .setCancelUrl(domain + "/cancel")
                 .addLineItem(
@@ -87,15 +113,15 @@ public class PaymentStripeService {
         return map;
     }
 
-    public Map<String, Object> createPaymentWithCard() throws StripeException {
+    public Map<String, Object> createPaymentWithCard(PaymentMethod paymentMethod) throws StripeException {
         Stripe.apiKey = stripeKey;
 
         PaymentMethodCreateParams.CardDetails cardDetails =
                 PaymentMethodCreateParams.CardDetails.builder()
-                        .setNumber("4242424242424242")
-                        .setExpMonth(8L)
-                        .setExpYear(2026L)
-                        .setCvc("314")
+                        .setNumber(paymentMethod.getCard().getCardNumber())
+                        .setExpMonth(paymentMethod.getCard().getExpMonth())
+                        .setExpYear(paymentMethod.getCard().getExpYear())
+                        .setCvc(paymentMethod.getCard().getCvc())
                         .build();
 
         PaymentMethodCreateParams params =
@@ -108,8 +134,8 @@ public class PaymentStripeService {
 
         PaymentIntentCreateParams paymentIntentParams = PaymentIntentCreateParams.builder()
                 .setPaymentMethod(params.getPaymentMethod())
-                .setAmount(1000L)
-                .setCurrency("brl")
+                .setAmount(paymentMethod.getAmount())
+                .setCurrency(currency)
                 .build();
 
         PaymentIntent paymentIntent = PaymentIntent.create(paymentIntentParams);
@@ -118,6 +144,36 @@ public class PaymentStripeService {
         map.put("client_secret", paymentIntent.getClientSecret());
 
         return map;
+    }
+
+    public Map<String, String> paymentWithCheckoutPage(CheckoutPayment checkoutPayment) throws StripeException {
+        Stripe.apiKey = stripeKey;
+
+        SessionCreateParams params = SessionCreateParams.builder()
+                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+                .setMode(SessionCreateParams.Mode.PAYMENT)
+                .setSuccessUrl(checkoutPayment.getSuccessUrl())
+                .setCancelUrl(checkoutPayment.getCancelUrl())
+                .addLineItem(
+                        SessionCreateParams.LineItem.builder()
+                                .setQuantity(checkoutPayment.getQuantity())
+                                .setPriceData(
+                                        SessionCreateParams.LineItem.PriceData.builder()
+                                                .setCurrency(checkoutPayment.getCurrency())
+                                                .setUnitAmount(checkoutPayment.getAmount())
+                                                .setProductData(
+                                                        SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                                                .setName(checkoutPayment.getName()).build()
+                                                ).build()
+                                ).build()
+                ).build();
+
+        Session session = Session.create(params);
+
+        Map<String, String> responseData = new HashMap<>();
+        responseData.put("id", session.getId());
+
+        return responseData;
     }
 
 
