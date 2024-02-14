@@ -1,6 +1,7 @@
 package com.cutconnect.services;
 
 import com.cutconnect.domains.CheckoutPayment;
+import com.cutconnect.domains.PaymentWithRecurring;
 import com.stripe.Stripe;
 import com.stripe.model.Event;
 import com.stripe.net.Webhook;
@@ -176,5 +177,24 @@ public class PaymentStripeService {
         return responseData;
     }
 
+    public Map<String, Object> subscriptionWithCheckoutPage(PaymentWithRecurring paymentWithRecurring) throws StripeException {
+        Stripe.apiKey = stripeKey;
+
+        SessionCreateParams params = new SessionCreateParams.Builder()
+                .setCancelUrl(paymentWithRecurring.getCancelUrl())
+                .setSuccessUrl(paymentWithRecurring.getSuccessUrl())
+                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+                .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
+                .addLineItem(
+                        new SessionCreateParams.LineItem.Builder()
+                                .setQuantity(paymentWithRecurring.getQuantity())
+                                .setPrice(paymentWithRecurring.getPriceId()).build()
+                ).build();
+
+        Session session = Session.create(params);
+        Map<String, Object> response = new HashMap<>();
+        response.put("sessionId", session.getId());
+        return response;
+    }
 
 }

@@ -3,6 +3,7 @@ package com.cutconnect.controllers;
 
 
 import com.cutconnect.domains.CheckoutPayment;
+import com.cutconnect.domains.PaymentWithRecurring;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -75,6 +76,16 @@ public class PaymentStripeController {
             return ResponseEntity.ok(paymentStripeService.paymentWithCheckoutPage(checkoutPayment));
         } catch (Exception e) {
             logger.error("Erro ao receber pagamento: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("payment-with-recurring")
+    public ResponseEntity<Map<String, Object>> subscriptionWithCheckoutPage(@RequestBody PaymentWithRecurring paymentWithRecurring) {
+        try {
+            return ResponseEntity.ok(paymentStripeService.subscriptionWithCheckoutPage(paymentWithRecurring));
+        } catch (Exception e) {
+            logger.error("Erro ao receber pagamento recorrente: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

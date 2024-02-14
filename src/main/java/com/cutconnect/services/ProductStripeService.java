@@ -9,13 +9,11 @@ import com.stripe.Stripe;
 import com.stripe.model.Product;
 import com.stripe.model.ProductCollection;
 import com.stripe.exception.StripeException;
-import com.stripe.param.ProductCreateParams;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.cutconnect.domains.ProductData;
-import com.cutconnect.domains.PackageDimensions;
 
 @Service
 public class ProductStripeService {

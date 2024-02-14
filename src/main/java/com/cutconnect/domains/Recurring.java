@@ -4,7 +4,7 @@ public class Recurring {
 
     private String aggregateUsage;
     private String interval;
-    private int intervalCount;
+    private Long intervalCount;
     private Long trialPeriodDays;
     private String usageType;
 
@@ -24,11 +24,11 @@ public class Recurring {
         this.interval = interval;
     }
 
-    public int getIntervalCount() {
+    public Long getIntervalCount() {
         return intervalCount;
     }
 
-    public void setIntervalCount(int intervalCount) {
+    public void setIntervalCount(Long intervalCount) {
         this.intervalCount = intervalCount;
     }
 

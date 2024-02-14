@@ -1,14 +1,25 @@
 package com.cutconnect.services;
 
+import com.cutconnect.domains.Recurring;
 import com.stripe.Stripe;
 import com.stripe.model.Price;
+import com.stripe.model.PriceCollection;
 import com.stripe.param.PriceCreateParams;
 import com.stripe.exception.StripeException;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.cutconnect.domains.Cost;
 import com.cutconnect.domains.PriceData;
+
 @Service
 public class PriceStripeService {
 
@@ -56,6 +67,67 @@ public class PriceStripeService {
                 .setProduct(priceData.getProduct()).build();
 
         Price price = Price.create(params);
+    }
+
+    public Cost getAllPricing() throws StripeException {
+        Stripe.apiKey = stripeKey;
+
+        Map<String, Object> params = new HashMap<>();
+
+        PriceCollection pricing = Price.list(params);
+
+        Cost cost = new Cost();
+
+        cost.setUrl(pricing.getUrl());
+        cost.setHasMore(pricing.getHasMore());
+        cost.setObject(pricing.getObject());
+
+        List<PriceData> allPricingData = getPriceData(pricing);
+        cost.setPriceData(allPricingData);
+
+        return cost;
+
+    }
+
+    private List<PriceData> getPriceData(PriceCollection pricing) {
+        List<PriceData> allPricingData = new ArrayList<>();
+
+        for (Price price: pricing.getData()) {
+            PriceData priceData = new PriceData();
+
+            priceData.setActive(price.getActive());
+            priceData.setCreated(price.getCreated());
+            priceData.setId(price.getId());
+            priceData.setLivemode(price.getLivemode());
+            priceData.setObject(price.getObject());
+            priceData.setType(price.getType());
+            priceData.setBillingScheme(price.getBillingScheme());
+            priceData.setCurrency(price.getCurrency());
+            priceData.setLookupKey(price.getLookupKey());
+            priceData.setNickname(price.getNickname());
+            priceData.setProduct(price.getProduct());
+            priceData.setTaxBehavior(price.getTaxBehavior());
+            priceData.setTiersMode(price.getTiersMode());
+            priceData.setUnitAmount(price.getUnitAmount());
+            priceData.setUnitAmountDecimal(price.getUnitAmountDecimal());
+
+            allPricingData.add(priceData);
+
+            if (price.getRecurring() != null) {
+
+                Recurring recurring = new Recurring();
+
+                recurring.setInterval(price.getRecurring().getInterval());
+                recurring.setAggregateUsage(price.getRecurring().getAggregateUsage());
+                recurring.setIntervalCount(price.getRecurring().getIntervalCount());
+                recurring.setTrialPeriodDays(price.getRecurring().getTrialPeriodDays());
+                recurring.setUsageType(price.getRecurring().getUsageType());
+
+                priceData.setRecurring(recurring);
+            }
+
+        }
+        return allPricingData;
     }
 
 }

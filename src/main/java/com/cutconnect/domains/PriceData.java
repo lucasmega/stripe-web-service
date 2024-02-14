@@ -2,6 +2,7 @@ package com.cutconnect.domains;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 public class PriceData {
@@ -27,7 +28,7 @@ public class PriceData {
     @JsonProperty("unit_amount")
     private Long unitAmount;
     @JsonProperty("unit_amount_decimal")
-    private String unitAmountDecimal;
+    private BigDecimal unitAmountDecimal;
 
     public String getId() {
         return id;
@@ -173,11 +174,11 @@ public class PriceData {
         this.unitAmount = unitAmount;
     }
 
-    public String getUnitAmountDecimal() {
+    public BigDecimal getUnitAmountDecimal() {
         return unitAmountDecimal;
     }
 
-    public void setUnitAmountDecimal(String unitAmountDecimal) {
+    public void setUnitAmountDecimal(BigDecimal unitAmountDecimal) {
         this.unitAmountDecimal = unitAmountDecimal;
     }
 }

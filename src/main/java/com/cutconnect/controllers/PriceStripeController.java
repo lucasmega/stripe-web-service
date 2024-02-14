@@ -20,13 +20,23 @@ public class PriceStripeController {
         this.priceStripeService = priceStripeService;
     }
 
-    @PostMapping("create-recurring-price")
+    @PostMapping("/create-recurring-price")
     public ResponseEntity<?> createRecurringPrice(@RequestBody PriceData priceData) {
         try {
             priceStripeService.createRecurringPrice(priceData);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            logger.error("Erro ao receber status: " + e);
+            logger.error("Erro ao criar recorrencia de preço: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/get-all-princing")
+    public ResponseEntity<?> getAllPricing() {
+        try {
+            return ResponseEntity.ok(priceStripeService.getAllPricing());
+        } catch (Exception e) {
+            logger.error("Erro ao criar preço: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
