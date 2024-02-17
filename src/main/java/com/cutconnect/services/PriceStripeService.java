@@ -7,6 +7,7 @@ import com.stripe.model.PriceCollection;
 import com.stripe.param.PriceCreateParams;
 import com.stripe.exception.StripeException;
 
+import com.stripe.param.PriceListParams;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -89,7 +90,7 @@ public class PriceStripeService {
 
     }
 
-    private List<PriceData> getPriceData(PriceCollection pricing) {
+    private static List<PriceData> getPriceData(PriceCollection pricing) {
         List<PriceData> allPricingData = new ArrayList<>();
 
         for (Price price: pricing.getData()) {
@@ -128,6 +129,28 @@ public class PriceStripeService {
 
         }
         return allPricingData;
+    }
+
+    public Cost getPriceByProduct(String productId) throws StripeException {
+        Stripe.apiKey = stripeKey;
+
+        PriceListParams params = PriceListParams.builder()
+                .setActive(true)
+                .setProduct(productId)
+                .build();
+
+        PriceCollection pricing = Price.list(params);
+
+        Cost cost = new Cost();
+
+        cost.setUrl(pricing.getUrl());
+        cost.setHasMore(pricing.getHasMore());
+        cost.setObject(pricing.getObject());
+
+        List<PriceData> allPricingData = getPriceData(pricing);
+        cost.setPriceData(allPricingData);
+
+        return cost;
     }
 
 }

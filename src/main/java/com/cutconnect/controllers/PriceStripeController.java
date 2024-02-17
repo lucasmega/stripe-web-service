@@ -1,5 +1,6 @@
 package com.cutconnect.controllers;
 
+import com.cutconnect.domains.Cost;
 import com.cutconnect.services.CustomerStripeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +33,21 @@ public class PriceStripeController {
     }
 
     @GetMapping("/get-all-princing")
-    public ResponseEntity<?> getAllPricing() {
+    public ResponseEntity<Cost> getAllPricing() {
         try {
             return ResponseEntity.ok(priceStripeService.getAllPricing());
         } catch (Exception e) {
-            logger.error("Erro ao criar preço: " + e);
+            logger.error("Erro ao buscar preço: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("get-price-by-product")
+    public ResponseEntity<Cost> getPriceByProduct(@RequestBody String productId) {
+        try {
+            return ResponseEntity.ok(priceStripeService.getPriceByProduct(productId));
+        } catch (Exception e) {
+            logger.error("Erro ao buscar preço por produto: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
