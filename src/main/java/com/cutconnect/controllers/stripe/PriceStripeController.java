@@ -1,11 +1,11 @@
-package com.cutconnect.controllers;
+package com.cutconnect.controllers.stripe;
 
-import com.cutconnect.domains.Cost;
+import com.cutconnect.domains.stripe.Cost;
 import com.cutconnect.services.CustomerStripeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cutconnect.domains.PriceData;
+import com.cutconnect.domains.stripe.PriceData;
 import com.cutconnect.services.PriceStripeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

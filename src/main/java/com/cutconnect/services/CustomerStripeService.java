@@ -1,10 +1,9 @@
 package com.cutconnect.services;
 
-import com.cutconnect.domains.CustomerData;
+import com.cutconnect.domains.stripe.CustomerData;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.*;
-import com.stripe.param.PaymentIntentCreateParams;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

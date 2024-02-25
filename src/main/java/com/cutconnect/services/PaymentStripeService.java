@@ -1,7 +1,7 @@
 package com.cutconnect.services;
 
-import com.cutconnect.domains.CheckoutPayment;
-import com.cutconnect.domains.PaymentWithRecurring;
+import com.cutconnect.domains.stripe.CheckoutPayment;
+import com.cutconnect.domains.stripe.PaymentWithRecurring;
 import com.stripe.Stripe;
 import com.stripe.model.Event;
 import com.stripe.net.Webhook;
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.stripe.model.PaymentIntent;
-import com.cutconnect.domains.PaymentMethod;
+import com.cutconnect.domains.stripe.PaymentMethod;
 
 
 @Service

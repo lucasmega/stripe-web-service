@@ -1,6 +1,6 @@
 package com.cutconnect.services;
 
-import com.cutconnect.domains.Recurring;
+import com.cutconnect.domains.stripe.Recurring;
 import com.stripe.Stripe;
 import com.stripe.model.Price;
 import com.stripe.model.PriceCollection;
@@ -8,7 +8,6 @@ import com.stripe.param.PriceCreateParams;
 import com.stripe.exception.StripeException;
 
 import com.stripe.param.PriceListParams;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -18,8 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.cutconnect.domains.Cost;
-import com.cutconnect.domains.PriceData;
+import com.cutconnect.domains.stripe.Cost;
+import com.cutconnect.domains.stripe.PriceData;
 
 @Service
 public class PriceStripeService {

@@ -13,7 +13,7 @@ import com.stripe.exception.StripeException;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.cutconnect.domains.ProductData;
+import com.cutconnect.domains.stripe.ProductData;
 
 @Service
 public class ProductStripeService {

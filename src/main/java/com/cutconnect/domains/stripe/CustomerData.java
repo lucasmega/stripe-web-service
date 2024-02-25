@@ -1,4 +1,4 @@
-package com.cutconnect.domains;
+package com.cutconnect.domains.stripe;
 
 public class CustomerData {
     public String name;

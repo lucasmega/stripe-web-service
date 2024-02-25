@@ -1,4 +1,4 @@
-package com.cutconnect.domains;
+package com.cutconnect.domains.stripe;
 
 import java.math.BigDecimal;
 
