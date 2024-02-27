@@ -2,7 +2,7 @@ package com.cutconnect.services;
 
 import com.cutconnect.domains.BarberShop;
 import com.cutconnect.repositories.BarberShopRepository;
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,7 +55,6 @@ public class BarberShopService {
 
         if (barberShopDB == null) {
             throw new EntityNotFoundException("BarberShop não encontrada para o ID: " + barberShop.getId());
-
         }
 
         barberShopRepository.delete(barberShopDB);

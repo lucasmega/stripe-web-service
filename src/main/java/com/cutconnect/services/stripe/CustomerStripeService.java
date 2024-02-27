@@ -1,4 +1,4 @@
-package com.cutconnect.services;
+package com.cutconnect.services.stripe;
 
 import com.cutconnect.domains.stripe.CustomerData;
 import com.stripe.Stripe;

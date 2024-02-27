@@ -1,12 +1,12 @@
 package com.cutconnect.controllers.stripe;
 
 import com.cutconnect.domains.stripe.Cost;
-import com.cutconnect.services.CustomerStripeService;
+import com.cutconnect.services.stripe.CustomerStripeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cutconnect.domains.stripe.PriceData;
-import com.cutconnect.services.PriceStripeService;
+import com.cutconnect.services.stripe.PriceStripeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import com.cutconnect.domains.stripe.PaymentMethod;
 import com.cutconnect.domains.stripe.CheckoutSession;
-import com.cutconnect.services.PaymentStripeService;
-import com.cutconnect.services.CustomerStripeService;
+import com.cutconnect.services.stripe.PaymentStripeService;
+import com.cutconnect.services.stripe.CustomerStripeService;
 
 import java.util.Map;
 

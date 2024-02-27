@@ -1,4 +1,4 @@
-package com.cutconnect.services;
+package com.cutconnect.services.stripe;
 
 import java.util.Map;
 import java.util.List;

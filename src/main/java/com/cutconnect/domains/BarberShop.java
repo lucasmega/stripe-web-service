@@ -1,5 +1,8 @@
 package com.cutconnect.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -8,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "professionals"})
 public class BarberShop {
 
     @Id

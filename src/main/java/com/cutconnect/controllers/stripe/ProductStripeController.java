@@ -1,6 +1,6 @@
 package com.cutconnect.controllers.stripe;
 
-import com.cutconnect.services.CustomerStripeService;
+import com.cutconnect.services.stripe.CustomerStripeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.cutconnect.domains.stripe.ProductData;
-import com.cutconnect.services.ProductStripeService;
+import com.cutconnect.services.stripe.ProductStripeService;
 
 import java.util.List;
 

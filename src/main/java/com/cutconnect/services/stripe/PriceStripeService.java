@@ -1,4 +1,4 @@
-package com.cutconnect.services;
+package com.cutconnect.services.stripe;
 
 import com.cutconnect.domains.stripe.Recurring;
 import com.stripe.Stripe;

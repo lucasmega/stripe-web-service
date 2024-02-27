@@ -1,3 +1,4 @@
+
 package com.cutconnect.configurations;
 
 import org.springframework.context.annotation.Configuration;
