@@ -20,6 +20,7 @@ public class Professional implements Serializable {
     @JoinColumn()
     private BarberShop barberShop;
 
+    @JoinColumn
     @OneToOne(mappedBy = "professional")
     private Schedule schedule;
 

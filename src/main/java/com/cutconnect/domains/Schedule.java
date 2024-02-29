@@ -1,6 +1,7 @@
 package com.cutconnect.domains;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -13,12 +14,9 @@ public class Schedule implements Serializable {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @JsonIgnore
     @OneToOne
-    @JoinColumn(name ="schendule_id")
-    @MapsId
     private Professional professional;
-
-    private Branch branch;
 
     private LocalDateTime dateTime;
 
@@ -36,14 +34,6 @@ public class Schedule implements Serializable {
 
     public void setProfessional(Professional professional) {
         this.professional = professional;
-    }
-
-    public Branch getBranch() {
-        return branch;
-    }
-
-    public void setBranch(Branch branch) {
-        this.branch = branch;
     }
 
     public LocalDateTime getDateTime() {
