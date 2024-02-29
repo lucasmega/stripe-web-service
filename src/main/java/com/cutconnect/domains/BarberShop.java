@@ -1,24 +1,23 @@
 package com.cutconnect.domains;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.io.Serializable;
 
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "professionals"})
-public class BarberShop {
-
+public class BarberShop implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
-    private String id = UUID.randomUUID().toString();
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
     private String name;
+
+
     @OneToMany(mappedBy = "barberShop")
-    private List<Professional> professionals;
+    private List<Branch> branches = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -35,10 +34,12 @@ public class BarberShop {
     public void setName(String name) {
         this.name = name;
     }
-    public List<Professional> getProfessionals() {
-        return professionals;
+
+    public List<Branch> getBranches() {
+        return branches;
     }
-    public void setProfessionals(List<Professional> professionals) {
-        this.professionals = professionals;
+
+    public void setBranches(List<Branch> branches) {
+        this.branches = branches;
     }
 }

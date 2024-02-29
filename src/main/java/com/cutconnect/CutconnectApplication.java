@@ -2,12 +2,12 @@ package com.cutconnect;
 
 import com.cutconnect.domains.BarberShop;
 import com.cutconnect.domains.Branch;
-import com.cutconnect.domains.Professional;
-import com.cutconnect.domains.Schedule;
+//import com.cutconnect.domains.Professional;
+//import com.cutconnect.domains.Schedule;
 import com.cutconnect.repositories.BarberShopRepository;
 import com.cutconnect.repositories.BranchRepository;
-import com.cutconnect.repositories.ProfessionalRepository;
-import com.cutconnect.repositories.ScheduleRepository;
+//import com.cutconnect.repositories.ProfessionalRepository;
+//import com.cutconnect.repositories.ScheduleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +18,8 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @SpringBootApplication
@@ -41,46 +43,25 @@ public class CutconnectApplication {
 
 	@Bean
 	public CommandLineRunner mockData(
-			ProfessionalRepository professionalRepository,
 			BarberShopRepository barberShopRepository,
-			BranchRepository branchRepository,
-			ScheduleRepository scheduleRepository) {
+			BranchRepository branchRepository
+	) {
 		return args -> {
-			// Mock de uma Barbearia
-			BarberShop barberShop = new BarberShop();
-			barberShop.setName("Barbearia Teste");
 
-			// Mock de Profissionais
-			Professional professional1 = new Professional();
-			professional1.setName("Profissional 1");
-			professional1.setBarberShop(barberShop);
+			BarberShop barberShop1 = new BarberShop();
+			barberShop1.setName("Barbearia Teste");
 
-			Professional professional2 = new Professional();
-			professional2.setName("Profissional 2");
-			professional2.setBarberShop(barberShop);
+			Branch branch1 = new Branch();
+			branch1.setName("Filial 1");
 
-			List<Professional> professionals = new ArrayList<>();
-			professionals.add(professional1);
-			professionals.add(professional2);
+			Branch branch2 = new Branch();
+			branch2.setName("Filial 2");
 
-			barberShop.setProfessionals(professionals);
+			branch1.setBarberShop(barberShop1);
+			branch2.setBarberShop(barberShop1);
 
-			// Mock de uma Filial (Branch)
-			Branch branch = new Branch();
-			branch.setName("Filial 1");
-			branch.setBarberShop(barberShop);
-
-			// Mock de um Agendamento (Schedule)
-			Schedule schedule = new Schedule();
-			schedule.setProfessional(professional1);
-			schedule.setBranch(branch);
-			schedule.setDateTime(LocalDateTime.now().plusDays(1));
-
-			// Salvando no banco de dados
-			barberShopRepository.save(barberShop);
-			branchRepository.save(branch);
-			professionalRepository.saveAll(professionals);
-			scheduleRepository.save(schedule);
+			barberShopRepository.save(barberShop1);
+			branchRepository.saveAll(List.of(branch1, branch2));
 		};
 	}
 

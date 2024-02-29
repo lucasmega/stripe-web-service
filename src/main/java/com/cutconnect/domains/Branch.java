@@ -1,17 +1,20 @@
 package com.cutconnect.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
-@Entity
-public class Branch {
+import java.io.Serializable;
 
+@Entity
+public class Branch implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idBranch;
-
     private String name;
-
+    @JsonIgnoreProperties({ "branches" })
     @ManyToOne
+    @JoinColumn()
     private BarberShop barberShop;
 
     public Long getIdBranch() {

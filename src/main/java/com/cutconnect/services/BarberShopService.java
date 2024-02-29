@@ -1,13 +1,15 @@
 package com.cutconnect.services;
 
-import com.cutconnect.domains.BarberShop;
-import com.cutconnect.repositories.BarberShopRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.cutconnect.repositories.BarberShopRepository;
+import com.cutconnect.domains.BarberShop;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +45,7 @@ public class BarberShopService {
 
     private void updateData(BarberShop barberShopDB, BarberShop barberShop) {
         barberShopDB.setName(barberShop.getName());
-        barberShopDB.setProfessionals(barberShop.getProfessionals());
+//        barberShopDB.setProfessionals(barberShop.getProfessionals());
     }
 
     public void delete(BarberShop barberShop) {
