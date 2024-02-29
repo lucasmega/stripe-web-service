@@ -4,10 +4,12 @@ import com.cutconnect.domains.BarberShop;
 import com.cutconnect.domains.Branch;
 //import com.cutconnect.domains.Professional;
 //import com.cutconnect.domains.Schedule;
+import com.cutconnect.domains.Professional;
 import com.cutconnect.repositories.BarberShopRepository;
 import com.cutconnect.repositories.BranchRepository;
 //import com.cutconnect.repositories.ProfessionalRepository;
 //import com.cutconnect.repositories.ScheduleRepository;
+import com.cutconnect.repositories.ProfessionalRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -44,7 +46,8 @@ public class CutconnectApplication {
 	@Bean
 	public CommandLineRunner mockData(
 			BarberShopRepository barberShopRepository,
-			BranchRepository branchRepository
+			BranchRepository branchRepository,
+			ProfessionalRepository professionalRepository
 	) {
 		return args -> {
 
@@ -60,8 +63,17 @@ public class CutconnectApplication {
 			branch1.setBarberShop(barberShop1);
 			branch2.setBarberShop(barberShop1);
 
+			Professional professionals1 = new Professional();
+			professionals1.setName("Profissional 1");
+			professionals1.setBarberShop(barberShop1);
+
+			Professional professionals2 = new Professional();
+			professionals2.setName("Profissional 1");
+			professionals2.setBarberShop(barberShop1);
+
 			barberShopRepository.save(barberShop1);
 			branchRepository.saveAll(List.of(branch1, branch2));
+			professionalRepository.saveAll(List.of(professionals1, professionals2));
 		};
 	}
 

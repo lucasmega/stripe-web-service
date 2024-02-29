@@ -9,20 +9,20 @@ import java.io.Serializable;
 public class Branch implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idBranch;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
     private String name;
     @JsonIgnoreProperties({ "branches" })
     @ManyToOne
     @JoinColumn()
     private BarberShop barberShop;
 
-    public Long getIdBranch() {
-        return idBranch;
+    public String getIdBranch() {
+        return id;
     }
 
-    public void setIdBranch(Long idBranch) {
-        this.idBranch = idBranch;
+    public void setIdBranch(String idBranch) {
+        this.id = idBranch;
     }
 
     public String getName() {

@@ -15,6 +15,8 @@ public class BarberShop implements Serializable {
     private String id;
     private String name;
 
+    @OneToMany(mappedBy = "barberShop")
+    private List<Professional> professionails = new ArrayList<>();
 
     @OneToMany(mappedBy = "barberShop")
     private List<Branch> branches = new ArrayList<>();
@@ -41,5 +43,13 @@ public class BarberShop implements Serializable {
 
     public void setBranches(List<Branch> branches) {
         this.branches = branches;
+    }
+
+    public List<Professional> getProfessionails() {
+        return professionails;
+    }
+
+    public void setProfessionails(List<Professional> professionails) {
+        this.professionails = professionails;
     }
 }
