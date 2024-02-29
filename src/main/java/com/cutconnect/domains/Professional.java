@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 public class Professional implements Serializable {
@@ -19,7 +20,8 @@ public class Professional implements Serializable {
     @JoinColumn()
     private BarberShop barberShop;
 
-//    private List<Schedule> appointments;
+    @OneToOne(mappedBy = "professional")
+    private Schedule schedule;
 
     public String getId() {
         return id;
@@ -45,11 +47,11 @@ public class Professional implements Serializable {
         this.barberShop = barberShop;
     }
 
-//    public List<Schedule> getAppointments() {
-//        return appointments;
-//    }
-//
-//    public void setAppointments(List<Schedule> appointments) {
-//        this.appointments = appointments;
-//    }
+    public Schedule getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+    }
 }
