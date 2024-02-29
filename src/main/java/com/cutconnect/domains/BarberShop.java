@@ -15,6 +15,7 @@ public class BarberShop implements Serializable {
     private String id;
     private String name;
 
+    @JsonIgnoreProperties
     @OneToMany(mappedBy = "barberShop")
     private List<Professional> professionails = new ArrayList<>();
 

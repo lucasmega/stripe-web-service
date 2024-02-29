@@ -1,5 +1,6 @@
 package com.cutconnect.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -7,15 +8,13 @@ import java.io.Serializable;
 
 @Entity
 public class Professional implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-
     private String name;
 
-    @JsonIgnoreProperties({ "professionails" })
+    @JsonIgnore
     @ManyToOne
     @JoinColumn()
     private BarberShop barberShop;
