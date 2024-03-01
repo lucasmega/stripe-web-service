@@ -76,4 +76,7 @@ public class BarberShopService {
         return barberShopRepository.findAll(pageRequest);
     }
 
+    public List<BarberShop> findByPartialName(String partialName) {
+        return barberShopRepository.findByNameContainingIgnoreCase(partialName);
+    }
 }

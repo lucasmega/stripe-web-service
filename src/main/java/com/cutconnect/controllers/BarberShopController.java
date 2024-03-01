@@ -77,4 +77,14 @@ public class BarberShopController {
          }
      }
 
+     @RequestMapping(value = "/find-by-partial-name/{name}", method = RequestMethod.GET)
+     public ResponseEntity<List<BarberShop>> findByPartialName(@PathVariable String name) {
+        try {
+            return ResponseEntity.ok(this.barberShopService.findByPartialName(name));
+        } catch (Exception e) {
+            logger.error("Erro ao buscar barbearias: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+     }
+
 }
