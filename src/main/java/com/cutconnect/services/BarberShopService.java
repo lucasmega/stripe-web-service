@@ -39,24 +39,30 @@ public class BarberShopService {
 
     public BarberShop update(BarberShop barberShop) {
         BarberShop barberShopDB = find(barberShop.getId());
+
+        if (barberShopDB == null || barberShopDB.getId() == null) {
+            throw new IllegalArgumentException("Não foi possível encontrar registros para serem atualizados");
+        }
+
         updateData(barberShopDB, barberShop);
         return barberShopRepository.save(barberShopDB);
     }
 
+
     private void updateData(BarberShop barberShopDB, BarberShop barberShop) {
         barberShopDB.setName(barberShop.getName());
-//        barberShopDB.setProfessionals(barberShop.getProfessionals());
+        barberShopDB.setProfessionails(barberShop.getProfessionails());
     }
 
-    public void delete(BarberShop barberShop) {
-        if (barberShop == null) {
+    public void delete(String id) {
+        if (id == null) {
             throw new IllegalArgumentException("BarberShop não pode ser nulo.");
         }
 
-        BarberShop barberShopDB = find(barberShop.getId());
+        BarberShop barberShopDB = find(id);
 
         if (barberShopDB == null) {
-            throw new EntityNotFoundException("BarberShop não encontrada para o ID: " + barberShop.getId());
+            throw new EntityNotFoundException("BarberShop não encontrada para o ID: " + barberShopDB.getId());
         }
 
         barberShopRepository.delete(barberShopDB);
