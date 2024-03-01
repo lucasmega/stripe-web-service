@@ -1,18 +1,15 @@
 package com.cutconnect.controllers;
 
-import java.net.URI;
-
 import com.cutconnect.domains.BarberShop;
 import com.cutconnect.services.BarberShopService;
 import com.cutconnect.services.stripe.CustomerStripeService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import spark.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -64,7 +61,7 @@ public class BarberShopController {
         try {
             return ResponseEntity.ok(this.barberShopService.update(barberShop));
         } catch (Exception e) {
-            logger.error("Erro ao buscar barbearia: " + e);
+            logger.error("Erro ao atualizar barbearia: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -75,7 +72,7 @@ public class BarberShopController {
               barberShopService.delete(id);
               return ResponseEntity.noContent().build();
          } catch (Exception e) {
-             logger.error("Erro ao buscar barbearia: " + e);
+             logger.error("Erro ao deletar barbearia: " + e);
              return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
          }
      }

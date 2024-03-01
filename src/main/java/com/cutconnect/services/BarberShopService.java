@@ -48,7 +48,6 @@ public class BarberShopService {
         return barberShopRepository.save(barberShopDB);
     }
 
-
     private void updateData(BarberShop barberShopDB, BarberShop barberShop) {
         barberShopDB.setName(barberShop.getName());
         barberShopDB.setProfessionails(barberShop.getProfessionails());

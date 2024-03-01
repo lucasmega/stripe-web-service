@@ -17,12 +17,12 @@ public class Branch implements Serializable {
     @JoinColumn()
     private BarberShop barberShop;
 
-    public String getIdBranch() {
+    public String getId() {
         return id;
     }
 
-    public void setIdBranch(String idBranch) {
-        this.id = idBranch;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
