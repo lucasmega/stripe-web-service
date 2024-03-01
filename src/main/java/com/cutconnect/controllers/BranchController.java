@@ -18,7 +18,7 @@ public class BranchController {
 
     private BranchService branchService;
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomerStripeService.class);
+    private static final Logger logger = LoggerFactory.getLogger(BranchController.class);
 
     @Autowired
     public BranchController(BranchService branchService) {

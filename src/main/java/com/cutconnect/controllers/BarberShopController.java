@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping(value = "/barbershop")
 public class BarberShopController {
 
-    private BarberShopService barberShopService;
+    private final BarberShopService barberShopService;
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerStripeService.class);
 

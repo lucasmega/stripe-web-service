@@ -30,6 +30,11 @@ public class ProfessionalService {
         return object.orElse(null);
     }
 
+    public Professional save(Professional professional) {
+        professional.setId(null);
+        return professionalRepository.save(professional);
+    }
+
     public Professional update(Professional professional) {
         Professional professionalDB = find(professional.getId());
 
