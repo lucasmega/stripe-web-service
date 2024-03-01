@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Service
 public class BarberShopService {
-    private BarberShopRepository barberShopRepository;
+    private final BarberShopRepository barberShopRepository;
 
     @Autowired
     public BarberShopService(BarberShopRepository barberShopRepository) {
