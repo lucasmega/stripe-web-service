@@ -3,10 +3,14 @@ package com.cutconnect.services.stripe;
 import com.cutconnect.domains.stripe.CheckoutPayment;
 import com.cutconnect.domains.stripe.PaymentWithRecurring;
 import com.stripe.Stripe;
+import com.stripe.model.Account;
+import com.stripe.model.AccountLink;
 import com.stripe.model.Event;
 import com.stripe.net.Webhook;
 import com.stripe.model.checkout.Session;
 import com.stripe.exception.StripeException;
+import com.stripe.param.AccountCreateParams;
+import com.stripe.param.AccountLinkCreateParams;
 import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.PaymentMethodCreateParams;
 import org.springframework.stereotype.Service;
@@ -195,6 +199,54 @@ public class PaymentStripeService {
         Map<String, Object> response = new HashMap<>();
         response.put("sessionId", session.getId());
         return response;
+    }
+
+    public Map<String, Object> createStripeAccount(String email) throws  StripeException {
+        Stripe.apiKey = stripeKey;
+
+        AccountCreateParams params =
+                AccountCreateParams.builder()
+                        .setCountry("BR")
+                        .setType(AccountCreateParams.Type.EXPRESS)
+                        .setCapabilities(
+                                AccountCreateParams.Capabilities.builder()
+                                        .setCardPayments(
+                                                AccountCreateParams.Capabilities.CardPayments.builder()
+                                                        .setRequested(true)
+                                                        .build()
+                                        )
+                                        .setTransfers(
+                                                AccountCreateParams.Capabilities.Transfers.builder().setRequested(true).build()
+                                        )
+                                        .build()
+                        )
+                        .setBusinessType(AccountCreateParams.BusinessType.INDIVIDUAL)
+                        .setBusinessProfile(
+                                AccountCreateParams.BusinessProfile.builder().setUrl("https://cutconnect-aa86b.web.app/sign-in").build()
+                        )
+                        .build();
+
+        Account account = Account.create(params);
+
+        return createLinkStripe(account.getId());
+    }
+
+    private Map<String, Object> createLinkStripe(String id) throws StripeException {
+        AccountLinkCreateParams params =
+                AccountLinkCreateParams.builder()
+                        .setAccount(id)
+                        .setRefreshUrl(domain + "/reauth")
+                        .setReturnUrl(domain + "/return")
+                        .setType(AccountLinkCreateParams.Type.ACCOUNT_ONBOARDING)
+                        .build();
+
+        AccountLink accountLink = AccountLink.create(params);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("url", accountLink.getUrl());
+        map.put("created", accountLink.getCreated());
+
+        return map;
     }
 
 }

@@ -4,6 +4,7 @@ package com.cutconnect.controllers.stripe;
 
 import com.cutconnect.domains.stripe.CheckoutPayment;
 import com.cutconnect.domains.stripe.PaymentWithRecurring;
+import com.stripe.model.AccountLink;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -86,6 +87,16 @@ public class PaymentStripeController {
             return ResponseEntity.ok(paymentStripeService.subscriptionWithCheckoutPage(paymentWithRecurring));
         } catch (Exception e) {
             logger.error("Erro ao receber pagamento recorrente: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("create-account")
+    public ResponseEntity<Map<String, Object>> createStripeAccount(@RequestBody String email) {
+        try {
+            return ResponseEntity.ok(paymentStripeService.createStripeAccount(email));
+        } catch (Exception e) {
+            logger.error("Erro ao criar conta na stripe: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
