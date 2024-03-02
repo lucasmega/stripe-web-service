@@ -8,6 +8,9 @@ public class CheckoutPayment {
     private String cancelUrl;
     private Long amount;
     private Long quantity;
+    private String price;
+
+    private String email;
 
     public String getName() {
         return name;
@@ -55,5 +58,29 @@ public class CheckoutPayment {
 
     public void setQuantity(long quantity) {
         this.quantity = quantity;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

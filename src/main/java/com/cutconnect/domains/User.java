@@ -9,6 +9,12 @@ import java.io.Serializable;
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    public User() { }
+    public User(String id, String email) {
+        this.id = id;
+        this.email = email;
+    }
+
     @Id
     private String id;
     private String email;

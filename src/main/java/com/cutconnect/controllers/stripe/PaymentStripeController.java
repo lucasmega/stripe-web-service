@@ -91,13 +91,24 @@ public class PaymentStripeController {
         }
     }
 
-    @PostMapping("create-account")
-    public ResponseEntity<Map<String, Object>> createStripeAccount(@RequestBody String email) {
+    @GetMapping("/checkout")
+    public ResponseEntity<Map<String, Object>> createSessionCheckout() {
         try {
-            return ResponseEntity.ok(paymentStripeService.createStripeAccount(email));
+            return ResponseEntity.ok(paymentStripeService.createSessionCheckout());
         } catch (Exception e) {
-            logger.error("Erro ao criar conta na stripe: " + e);
+            logger.error("Erro: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/payment")
+    public ResponseEntity<Map<String, String>> createPayment(@RequestBody CheckoutPayment checkoutPayment) {
+        try {
+            return ResponseEntity.ok(paymentStripeService.paymentWithCheckoutPageConnectedAccount(checkoutPayment, "acct_1OpyCIQ2e9tLHH8u"));
+        } catch (Exception e) {
+            logger.error("error " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+
         }
     }
 }

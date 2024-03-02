@@ -2,17 +2,15 @@ package com.cutconnect.services.stripe;
 
 import com.cutconnect.domains.stripe.CheckoutPayment;
 import com.cutconnect.domains.stripe.PaymentWithRecurring;
+import com.cutconnect.repositories.UserRepository;
 import com.stripe.Stripe;
-import com.stripe.model.Account;
-import com.stripe.model.AccountLink;
 import com.stripe.model.Event;
 import com.stripe.net.Webhook;
 import com.stripe.model.checkout.Session;
 import com.stripe.exception.StripeException;
-import com.stripe.param.AccountCreateParams;
-import com.stripe.param.AccountLinkCreateParams;
 import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.PaymentMethodCreateParams;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.stripe.param.checkout.SessionCreateParams;
 
@@ -39,6 +37,13 @@ public class PaymentStripeService {
 
     @Value("${currency}")
     private String currency;
+
+    private final UserRepository userRepository;
+
+    @Autowired
+    public PaymentStripeService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public Boolean handleWebhook(String payload, String sigHeader) throws StripeException {
         Stripe.apiKey = stripeKey;
@@ -201,52 +206,79 @@ public class PaymentStripeService {
         return response;
     }
 
-    public Map<String, Object> createStripeAccount(String email) throws  StripeException {
+    public Map<String, Object> createSessionCheckout() throws StripeException {
         Stripe.apiKey = stripeKey;
 
-        AccountCreateParams params =
-                AccountCreateParams.builder()
-                        .setCountry("BR")
-                        .setType(AccountCreateParams.Type.EXPRESS)
-                        .setCapabilities(
-                                AccountCreateParams.Capabilities.builder()
-                                        .setCardPayments(
-                                                AccountCreateParams.Capabilities.CardPayments.builder()
-                                                        .setRequested(true)
+        SessionCreateParams params =
+                SessionCreateParams.builder()
+                        .setMode(SessionCreateParams.Mode.PAYMENT)
+                        .addLineItem(
+                                SessionCreateParams.LineItem.builder()
+                                        .setPrice("price_1OjWAKL6Za5M71TpIW3ohGmi")
+                                        .setQuantity(1L)
+                                        .build()
+                        )
+                        .setPaymentIntentData(
+                                SessionCreateParams.PaymentIntentData.builder()
+                                        .setApplicationFeeAmount(123L)
+                                        .setTransferData(
+                                                SessionCreateParams.PaymentIntentData.TransferData.builder()
+                                                        .setDestination("acct_1OpyCIQ2e9tLHH8u")
                                                         .build()
-                                        )
-                                        .setTransfers(
-                                                AccountCreateParams.Capabilities.Transfers.builder().setRequested(true).build()
                                         )
                                         .build()
                         )
-                        .setBusinessType(AccountCreateParams.BusinessType.INDIVIDUAL)
-                        .setBusinessProfile(
-                                AccountCreateParams.BusinessProfile.builder().setUrl("https://cutconnect-aa86b.web.app/sign-in").build()
-                        )
+                        .setSuccessUrl(domain + "/success")
+                        .setCancelUrl(domain + "/cancel")
                         .build();
 
-        Account account = Account.create(params);
-
-        return createLinkStripe(account.getId());
-    }
-
-    private Map<String, Object> createLinkStripe(String id) throws StripeException {
-        AccountLinkCreateParams params =
-                AccountLinkCreateParams.builder()
-                        .setAccount(id)
-                        .setRefreshUrl(domain + "/reauth")
-                        .setReturnUrl(domain + "/return")
-                        .setType(AccountLinkCreateParams.Type.ACCOUNT_ONBOARDING)
-                        .build();
-
-        AccountLink accountLink = AccountLink.create(params);
-
+        Session session = Session.create(params);
         Map<String, Object> map = new HashMap<>();
-        map.put("url", accountLink.getUrl());
-        map.put("created", accountLink.getCreated());
+        map.put("id", session.getId());
 
         return map;
     }
 
+    public Map<String, String> paymentWithCheckoutPageConnectedAccount(CheckoutPayment checkoutPayment, String connectedAccountId) throws StripeException {
+        Stripe.apiKey = stripeKey;
+
+        SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
+                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+                .setMode(SessionCreateParams.Mode.PAYMENT)
+                .setSuccessUrl(checkoutPayment.getSuccessUrl())
+                .setCancelUrl(checkoutPayment.getCancelUrl())
+                .addLineItem(
+                        SessionCreateParams.LineItem.builder()
+                                .setQuantity(checkoutPayment.getQuantity())
+                                .setPriceData(
+                                        SessionCreateParams.LineItem.PriceData.builder()
+                                                .setCurrency(checkoutPayment.getCurrency())
+                                                .setUnitAmount(checkoutPayment.getAmount())
+                                                .setProductData(
+                                                        SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                                                .setName(checkoutPayment.getName()).build()
+                                                ).build()
+                                ).build()
+                );
+
+        if (connectedAccountId != null && !connectedAccountId.isEmpty()) {
+            paramsBuilder.setPaymentIntentData(
+                    SessionCreateParams.PaymentIntentData.builder()
+                            .setTransferData(
+                                    SessionCreateParams.PaymentIntentData.TransferData.builder()
+                                            .setDestination(connectedAccountId)
+                                            .build()
+                            )
+                            .setApplicationFeeAmount(123L)
+                            .build()
+            );
+        }
+
+        Session session = Session.create(paramsBuilder.build());
+
+        Map<String, String> responseData = new HashMap<>();
+        responseData.put("id", session.getId());
+
+        return responseData;
+    }
 }

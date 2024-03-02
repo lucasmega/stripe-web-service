@@ -79,10 +79,7 @@ public class ProductStripeService {
     private ProductData setProductData(Product product) {
         ProductData productData = new ProductData();
         productData.setActive(product.getActive());
-        productData.setAttributes(product.getAttributes());
-        productData.setCaption(product.getCaption());
         productData.setCreated(product.getCreated());
-        productData.setDeactivateOn(product.getDeactivateOn());
         productData.setDeleted(product.getDeleted());
         productData.setDescription(product.getDescription());
         productData.setId(product.getId());
@@ -114,10 +111,7 @@ public class ProductStripeService {
             ProductData productData = new ProductData();
 
             productData.setActive(product.getActive());
-            productData.setAttributes(product.getAttributes());
-            productData.setCaption(product.getCaption());
             productData.setCreated(product.getCreated());
-            productData.setDeactivateOn(product.getDeactivateOn());
             productData.setDeleted(product.getDeleted());
             productData.setDescription(product.getDescription());
             productData.setId(product.getId());
