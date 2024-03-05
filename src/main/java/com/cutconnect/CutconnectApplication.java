@@ -1,17 +1,11 @@
 package com.cutconnect;
 
-import com.cutconnect.domains.BarberShop;
-import com.cutconnect.domains.Branch;
+import com.cutconnect.domains.*;
 //import com.cutconnect.domains.Professional;
 //import com.cutconnect.domains.Schedule;
-import com.cutconnect.domains.Professional;
-import com.cutconnect.domains.Schedule;
-import com.cutconnect.repositories.BarberShopRepository;
-import com.cutconnect.repositories.BranchRepository;
+import com.cutconnect.repositories.*;
 //import com.cutconnect.repositories.ProfessionalRepository;
 //import com.cutconnect.repositories.ScheduleRepository;
-import com.cutconnect.repositories.ProfessionalRepository;
-import com.cutconnect.repositories.ScheduleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -50,12 +44,31 @@ public class CutconnectApplication {
 			BarberShopRepository barberShopRepository,
 			BranchRepository branchRepository,
 			ProfessionalRepository professionalRepository,
-			ScheduleRepository scheduleRepository
+			ScheduleRepository scheduleRepository,
+			AddressRepository addressRepository
 	) {
 		return args -> {
 
 			BarberShop barberShop1 = new BarberShop();
 			barberShop1.setName("Barbearia Teste");
+
+			Address address1 = new Address();
+			address1.setStreet("Rua Carlos Magalhães");
+			address1.setNumber("60");
+			address1.setDistrict("Parque Rebouças");
+			address1.setCity("São Paulo");
+			address1.setState("São Paulo");
+			address1.setZipCode("04852050");
+//			address1.setBranch(branch1);
+
+			Address address2 = new Address();
+			address2.setStreet("Rua Carlos Magalhães");
+			address2.setNumber("60");
+			address2.setDistrict("Parque Rebouças");
+			address2.setCity("São Paulo");
+			address2.setState("São Paulo");
+			address2.setZipCode("04852050");
+//			address2.setBranch(branch2);
 
 			Branch branch1 = new Branch();
 			branch1.setName("Filial 1");
@@ -65,14 +78,20 @@ public class CutconnectApplication {
 
 			branch1.setBarberShop(barberShop1);
 			branch2.setBarberShop(barberShop1);
+			branch1.setAddress(address1);
+			branch2.setAddress(address2);
+
+
 
 			Professional professionals1 = new Professional();
-			professionals1.setName("Profissional 1");
+			professionals1.setName("João Pereira");
 			professionals1.setBarberShop(barberShop1);
+			professionals1.setPosition("Barbeiro");
 
 			Professional professionals2 = new Professional();
-			professionals2.setName("Profissional 1");
+			professionals2.setName("Felipe Silva");
 			professionals2.setBarberShop(barberShop1);
+			professionals2.setPosition("Trancista");
 
 			Schedule schedule1 = new Schedule();
 			schedule1.setDateTime(LocalDateTime.now());
@@ -83,6 +102,7 @@ public class CutconnectApplication {
 			schedule2.setProfessional(professionals2);
 
 			barberShopRepository.save(barberShop1);
+			addressRepository.saveAll(List.of(address1, address2));
 			branchRepository.saveAll(List.of(branch1, branch2));
 			professionalRepository.saveAll(List.of(professionals1, professionals2));
 			scheduleRepository.saveAll(List.of(schedule1, schedule2));

@@ -1,5 +1,6 @@
 package com.cutconnect.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -16,6 +17,9 @@ public class Branch implements Serializable {
     @ManyToOne
     @JoinColumn()
     private BarberShop barberShop;
+
+    @OneToOne
+    private Address address;
 
     public String getId() {
         return id;
@@ -39,5 +43,13 @@ public class Branch implements Serializable {
 
     public void setBarberShop(BarberShop barberShop) {
         this.barberShop = barberShop;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }

@@ -9,7 +9,6 @@ public class CheckoutPayment {
     private Long amount;
     private Long quantity;
     private String price;
-
     private String email;
 
     public String getName() {

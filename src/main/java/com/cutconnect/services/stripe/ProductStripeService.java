@@ -10,6 +10,7 @@ import com.stripe.model.Product;
 import com.stripe.model.ProductCollection;
 import com.stripe.exception.StripeException;
 
+import com.stripe.net.RequestOptions;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -99,12 +100,16 @@ public class ProductStripeService {
         return productData;
     }
 
-    public List<ProductData> getAllProducts() throws StripeException {
+    public List<ProductData> getAllProducts(String connectedAccountId) throws StripeException {
         Stripe.apiKey = stripeKey;
+
+        RequestOptions requestOptions = RequestOptions.builder()
+                .setStripeAccount(connectedAccountId)
+                .build();
 
         Map<String, Object> params = new HashMap<>();
 
-        ProductCollection products = Product.list(params);
+        ProductCollection products = Product.list(params, requestOptions);
         List<ProductData> allProductData = new ArrayList<>();
 
         for (Product product : products.getData()) {

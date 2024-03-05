@@ -1,6 +1,7 @@
 package com.cutconnect.services;
 
 import com.cutconnect.domains.User;
+import com.cutconnect.domains.form.FavoriteBarbershop;
 import com.cutconnect.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ public class UserService {
     }
     private void updateData(User userDB, User user) {
         userDB.setEmail(user.getEmail());
+        userDB.setBarbershopId(user.getBarbershopId());
     }
 
     public void delete(String id) {
@@ -62,5 +64,19 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public void addFavoriteBarbershop(FavoriteBarbershop object) {
+
+        User userDB = find(object.getEmail());
+
+        if (userDB == null || userDB.getEmail() == null) {
+            save(new User(object.getUid(), object.getEmail(),null, object.getBarbershopId()));
+        }
+
+        if (userDB != null && userDB.getEmail() != null) {
+            update(new User(object.getUid(), object.getEmail(),null, object.getBarbershopId()));
+        }
+
     }
 }

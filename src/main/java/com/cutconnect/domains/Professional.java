@@ -22,6 +22,8 @@ public class Professional implements Serializable {
     @OneToOne(mappedBy = "professional")
     private Schedule schedule;
 
+    public String position;
+
     public String getId() {
         return id;
     }
@@ -52,5 +54,13 @@ public class Professional implements Serializable {
 
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 }

@@ -2,6 +2,7 @@ package com.cutconnect.controllers;
 
 import java.util.List;
 
+import com.cutconnect.domains.form.FavoriteBarbershop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -72,6 +73,17 @@ public class UserController {
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             logger.error("Erro ao deletar usuário: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @RequestMapping(value = "/add-favorite-barbershop", method = RequestMethod.POST)
+    public ResponseEntity<Void> addFavoriteBarbershop(@RequestBody FavoriteBarbershop object) {
+        try {
+            userService.addFavoriteBarbershop(object);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            logger.error("Erro ao favoritar barbearia: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

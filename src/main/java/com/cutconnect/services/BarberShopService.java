@@ -1,5 +1,7 @@
 package com.cutconnect.services;
 
+import com.cutconnect.domains.User;
+import com.cutconnect.domains.form.FavoriteBarbershop;
 import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.data.domain.Page;

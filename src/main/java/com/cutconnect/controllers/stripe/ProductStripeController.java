@@ -37,7 +37,7 @@ public class ProductStripeController {
     @GetMapping("/get-all-products")
     public ResponseEntity<List<ProductData>> getAllProducts() {
         try {
-            return ResponseEntity.ok(productStripeService.getAllProducts());
+            return ResponseEntity.ok(productStripeService.getAllProducts("acct_1OpyCIQ2e9tLHH8u"));
         } catch (Exception e) {
             logger.error("Erro ao buscar produtos: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

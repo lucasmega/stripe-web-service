@@ -40,6 +40,8 @@ public class PaymentStripeService {
 
     private final UserRepository userRepository;
 
+    private final Long FEEAMOUNT = 123L;
+
     @Autowired
     public PaymentStripeService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -269,7 +271,7 @@ public class PaymentStripeService {
                                             .setDestination(connectedAccountId)
                                             .build()
                             )
-                            .setApplicationFeeAmount(123L)
+                            .setApplicationFeeAmount(FEEAMOUNT)
                             .build()
             );
         }

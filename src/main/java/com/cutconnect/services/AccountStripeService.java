@@ -59,13 +59,13 @@ public class AccountStripeService {
 
         Account account = Account.create(params);
 
-        userRepository.save(createObject(account.getId(), email));
+        userRepository.save(createObject(email, account.getId()));
 
         return createLinkStripe(account.getId());
     }
 
-    private User createObject(String id, String email) {
-        return new User(id, email);
+    private User createObject(String email, String accountId) {
+        return new User(null, email, accountId);
     }
 
     private Map<String, Object> createLinkStripe(String id) throws StripeException {
