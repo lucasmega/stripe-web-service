@@ -1,16 +1,17 @@
 package com.cutconnect.services.stripe;
 
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.util.*;
 
+import com.cutconnect.domains.dto.ProductWithPriceDTO;
+import com.cutconnect.domains.stripe.Cost;
+import com.cutconnect.domains.stripe.PriceData;
 import com.stripe.Stripe;
-import com.stripe.model.Product;
-import com.stripe.model.ProductCollection;
+import com.stripe.model.*;
 import com.stripe.exception.StripeException;
 
 import com.stripe.net.RequestOptions;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -21,6 +22,13 @@ public class ProductStripeService {
 
     @Value("${stripe.api-key}")
     private String stripeKey;
+
+    private final PriceStripeService priceStripeService;
+
+    @Autowired
+    ProductStripeService(PriceStripeService priceStripeService) {
+        this.priceStripeService = priceStripeService;
+    }
 
     public ProductData createProduct(ProductData productData) throws StripeException {
         Stripe.apiKey = stripeKey;
@@ -146,5 +154,99 @@ public class ProductStripeService {
         return "Produto de id: " +  productId + " deletado com sucesso";
     }
 
+    public List<Product> getAllProductsFromConnectedAccounts() throws StripeException {
+        Stripe.apiKey = stripeKey;
+
+        AccountCollection accounts = Account.list((Map<String, Object>) null);
+
+        List<Product> allProducts = new java.util.ArrayList<>();
+
+        for (Account account : accounts.getData()) {
+            ProductCollection products = Product.list(Map.of("limit", 100), RequestOptions.builder().setStripeAccount(account.getId()).build());
+            allProducts.addAll(products.getData());
+        }
+
+        return allProducts;
+    }
+
+
+    public List<ProductWithPriceDTO> getProductsWithPrice() throws StripeException {
+
+        List<ProductWithPriceDTO> list = new ArrayList<ProductWithPriceDTO>();
+
+        List<Product> products = getAllProductsFromConnectedAccounts();
+        List<Price> prices = priceStripeService.getAllPricesFromConnectedAccounts();
+
+        for (Product product : products) {
+            ProductWithPriceDTO object = getProductWithPriceDTO(product, prices);
+            list.add(object);
+
+            if (list.size() == 4) {
+                return list;
+            }
+        }
+
+        return list;
+    }
+
+    @NotNull
+    private static ProductWithPriceDTO getProductWithPriceDTO(Product product, List<Price> prices) {
+        ProductWithPriceDTO object = new ProductWithPriceDTO();
+
+        object.setProductId(product.getId());
+        object.setActive(product.getActive());
+        object.setProductName(product.getName());
+        object.setImage(product.getImages().get(0));
+
+        for (Price price : prices) {
+            if (product.getId().equals(price.getProduct())) {
+                object.setPriceId(price.getId());
+                object.setUnitAmount(price.getUnitAmount());
+                object.setUnitAmountDecimal(price.getUnitAmountDecimal());
+            }
+        }
+        return object;
+    }
+
+
+    public List<Product> getAllProductsFromConnectedAccount(String accountId) throws StripeException {
+        Stripe.apiKey = stripeKey;
+
+        List<Product> allProducts = new ArrayList<>();
+
+        ProductCollection products = Product.list(Map.of("limit", 100), RequestOptions.builder().setStripeAccount(accountId).build());
+        allProducts.addAll(products.getData());
+
+        return allProducts;
+    }
+
+    public List<Price> getAllPricesFromConnectedAccount(String accountId) throws StripeException {
+        Stripe.apiKey = stripeKey;
+
+        List<Price> allPrices = new ArrayList<>();
+
+        PriceCollection prices = Price.list(Map.of("limit", 100), RequestOptions.builder().setStripeAccount(accountId).build());
+        allPrices.addAll(prices.getData());
+
+        return allPrices;
+    }
+
+    public List<ProductWithPriceDTO> getProductsWithPriceFromAccount(String accountId) throws StripeException {
+        List<ProductWithPriceDTO> list = new ArrayList<>();
+
+        List<Product> products = getAllProductsFromConnectedAccount(accountId);
+        List<Price> prices = getAllPricesFromConnectedAccount(accountId);
+
+        for (Product product : products) {
+            ProductWithPriceDTO object = getProductWithPriceDTO(product, prices);
+            list.add(object);
+
+            if (list.size() == 4) {
+                return list;
+            }
+        }
+
+        return list;
+    }
 
 }

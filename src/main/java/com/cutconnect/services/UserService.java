@@ -79,4 +79,9 @@ public class UserService {
         }
 
     }
+
+    public boolean isBarbershopLinked(String email) {
+        User user = findByEmail(email);
+        return user.getBarbershopId() != null;
+    }
 }

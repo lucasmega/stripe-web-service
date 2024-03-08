@@ -2,8 +2,10 @@ package com.cutconnect.services.stripe;
 
 import com.cutconnect.domains.stripe.Recurring;
 import com.stripe.Stripe;
+import com.stripe.model.Account;
 import com.stripe.model.Price;
 import com.stripe.model.PriceCollection;
+import com.stripe.net.RequestOptions;
 import com.stripe.param.PriceCreateParams;
 import com.stripe.exception.StripeException;
 
@@ -150,6 +152,27 @@ public class PriceStripeService {
         cost.setPriceData(allPricingData);
 
         return cost;
+    }
+
+    public List<Price> getAllPricesFromConnectedAccounts() throws StripeException {
+        Stripe.apiKey = stripeKey;
+
+        List<Price> allPrices = new ArrayList<>();
+
+        List<Account> connectedAccounts = Account.list((Map<String, Object>) null).getData();
+
+        for (Account connectedAccount : connectedAccounts) {
+            String connectedAccountId = connectedAccount.getId();
+
+            List<Price> pricesInConnectedAccount = Price.list(
+                    (Map<String, Object>) null,
+                    new RequestOptions.RequestOptionsBuilder().setStripeAccount(connectedAccountId).build()
+            ).getData();
+
+            allPrices.addAll(pricesInConnectedAccount);
+        }
+
+        return allPrices;
     }
 
 }
