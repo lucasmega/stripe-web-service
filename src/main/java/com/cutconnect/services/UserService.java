@@ -44,8 +44,9 @@ public class UserService {
         return userRepository.save(userDB);
     }
     private void updateData(User userDB, User user) {
-        userDB.setEmail(user.getEmail());
-        userDB.setBarbershopId(user.getBarbershopId());
+        if (user.getId() != null) { userDB.setId(user.getId()); }
+        if (user.getEmail() != null) { userDB.setEmail(user.getEmail()); }
+        if (user.getBarbershopId() != null) { userDB.setBarbershopId(user.getBarbershopId()); }
     }
 
     public void delete(String id) {
@@ -80,8 +81,11 @@ public class UserService {
 
     }
 
-    public boolean isBarbershopLinked(String email) {
-        User user = findByEmail(email);
-        return user.getBarbershopId() != null;
+    public void register(User user) {
+        if (find(user.getId()) == null) {
+            save(user);
+        } else {
+            update(user);
+        }
     }
 }

@@ -88,4 +88,14 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<Void> register(@RequestBody User user) {
+        try {
+            userService.register(user);
+           return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            logger.error("Erro ao registrar usuário: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }
