@@ -25,9 +25,9 @@ public class PriceData {
     private String transformQuantity;
     private String type;
 
-    @JsonProperty("unit_amount")
+//    @JsonProperty("unit_amount")
     private Long unitAmount;
-    @JsonProperty("unit_amount_decimal")
+//    @JsonProperty("unit_amount_decimal")
     private BigDecimal unitAmountDecimal;
 
     public String getId() {

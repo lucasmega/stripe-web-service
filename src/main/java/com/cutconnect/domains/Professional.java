@@ -4,10 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 public class Professional implements Serializable {
     private static final long serialVersionUID = 1L;
+    public Professional() { }
+    public Professional(String id, String name, BarberShop barberShop, String position) {
+        this.id = id;
+        this.name = name;
+        this.barberShop = barberShop;
+        this.position = position;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -18,9 +27,8 @@ public class Professional implements Serializable {
     @JoinColumn()
     private BarberShop barberShop;
 
-    @JoinColumn
-    @OneToOne(mappedBy = "professional")
-    private Schedule schedule;
+    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Schedule> schedules;
 
     public String position;
 
@@ -48,12 +56,12 @@ public class Professional implements Serializable {
         this.barberShop = barberShop;
     }
 
-    public Schedule getSchedule() {
-        return schedule;
+    public List<Schedule> getSchedules() {
+        return schedules;
     }
 
-    public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
     }
 
     public String getPosition() {

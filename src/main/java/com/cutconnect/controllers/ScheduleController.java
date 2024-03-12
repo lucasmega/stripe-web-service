@@ -1,6 +1,7 @@
 package com.cutconnect.controllers;
 
 import java.util.List;
+import java.time.LocalTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cutconnect.domains.Schedule;
 import com.cutconnect.services.ScheduleService;
+import com.cutconnect.domains.form.ScheduleFromBarbershop;
+import com.cutconnect.domains.form.ScheduleFromProfissional;
 
 @RestController
 @RequestMapping(value = "/schedule")
@@ -74,5 +77,20 @@ public class ScheduleController {
             logger.error("Erro ao deletar agenda: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+    @RequestMapping(value = "/find-hour-by-profissional", method = RequestMethod.POST)
+    public ResponseEntity<List<LocalTime>> findHourByProfessional(@RequestBody ScheduleFromProfissional object) {
+        try {
+            return ResponseEntity.ok(scheduleService.findHourByProfessional(object));
+        } catch (Exception e) {
+            logger.error("Não foi possível gerar os horários diponíveis: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @RequestMapping(value = "/find-hour-by-date-from-barbershop", method = RequestMethod.POST)
+    public ResponseEntity<List<LocalTime>> findHourByDateFromBarbershop(@RequestBody ScheduleFromBarbershop object) {
+           return ResponseEntity.ok(scheduleService.findHourByDateFromBarbershop(object));
     }
 }

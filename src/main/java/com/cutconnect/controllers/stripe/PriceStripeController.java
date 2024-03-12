@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@RequestMapping(value = "/price")
 @RestController
 public class PriceStripeController {
 
@@ -20,8 +21,7 @@ public class PriceStripeController {
     public PriceStripeController(PriceStripeService priceStripeService) {
         this.priceStripeService = priceStripeService;
     }
-
-    @PostMapping("/create-recurring-price")
+    @RequestMapping(value = "/create-recurring-price", method = RequestMethod.POST)
     public ResponseEntity<?> createRecurringPrice(@RequestBody PriceData priceData) {
         try {
             priceStripeService.createRecurringPrice(priceData);
@@ -31,18 +31,16 @@ public class PriceStripeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-    @GetMapping("/get-all-princing")
+    @RequestMapping(value = "/get-all-princing", method = RequestMethod.GET)
     public ResponseEntity<Cost> getAllPricing() {
         try {
-            return ResponseEntity.ok(priceStripeService.getAllPricing());
+            return ResponseEntity.ok(priceStripeService.getAllPricing("acct_1OpyCIQ2e9tLHH8u"));
         } catch (Exception e) {
             logger.error("Erro ao buscar preço: " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-    @PostMapping("get-price-by-product")
+    @RequestMapping(value = "/get-price-by-product", method = RequestMethod.POST)
     public ResponseEntity<Cost> getPriceByProduct(@RequestBody String productId) {
         try {
             return ResponseEntity.ok(priceStripeService.getPriceByProduct(productId));

@@ -1,11 +1,8 @@
 package com.cutconnect;
 
+import java.util.Random;
 import com.cutconnect.domains.*;
-//import com.cutconnect.domains.Professional;
-//import com.cutconnect.domains.Schedule;
 import com.cutconnect.repositories.*;
-//import com.cutconnect.repositories.ProfessionalRepository;
-//import com.cutconnect.repositories.ScheduleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,7 +11,9 @@ import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -94,20 +93,46 @@ public class CutconnectApplication {
 			professionals2.setPosition("Trancista");
 
 			Schedule schedule1 = new Schedule();
-			schedule1.setDateTime(LocalDateTime.now());
+			schedule1.setDate(LocalDate.of(2024, 03, 11));
+			schedule1.setTime(LocalTime.of(9, 00, 00));
 			schedule1.setProfessional(professionals1);
 
 			Schedule schedule2 = new Schedule();
-			schedule2.setDateTime(LocalDateTime.now());
+			schedule2.setDate(LocalDate.now());
+			schedule2.setTime(LocalTime.now());
 			schedule2.setProfessional(professionals2);
+
+			Schedule schedule3 = new Schedule();
+			schedule3.setDate(LocalDate.of(2024, 03, 11));
+			schedule3.setTime(LocalTime.of(9, 00, 00));
+			schedule3.setProfessional(professionals2);
+
+			Schedule schedule4 = new Schedule();
+			schedule4.setDate(generateRandomFutureDate(new Random()));
+			schedule4.setTime(generateRandomTime(new Random()));
+			schedule4.setProfessional(professionals2);
 
 			barberShopRepository.save(barberShop1);
 			addressRepository.saveAll(List.of(address1, address2));
 			branchRepository.saveAll(List.of(branch1, branch2));
 			professionalRepository.saveAll(List.of(professionals1, professionals2));
-			scheduleRepository.saveAll(List.of(schedule1, schedule2));
+			scheduleRepository.saveAll(List.of(schedule1, schedule2, schedule3, schedule4));
 		};
 	}
 
+	private static LocalTime generateRandomTime(Random random) {
+		int hour = random.nextInt(24);
+		int minute = random.nextInt(60);
+
+		return LocalTime.of(hour, minute);
+	}
+
+	private static LocalDate generateRandomFutureDate(Random random) {
+		int daysInFuture = random.nextInt(365);
+
+		LocalDate currentDate = LocalDate.now();
+
+		return currentDate.plusDays(daysInFuture);
+	}
 
 }

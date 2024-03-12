@@ -71,12 +71,16 @@ public class PriceStripeService {
         Price price = Price.create(params);
     }
 
-    public Cost getAllPricing() throws StripeException {
+    public Cost getAllPricing(String connectedAccountId) throws StripeException {
         Stripe.apiKey = stripeKey;
+
+        RequestOptions requestOptions = RequestOptions.builder()
+                .setStripeAccount(connectedAccountId)
+                .build();
 
         Map<String, Object> params = new HashMap<>();
 
-        PriceCollection pricing = Price.list(params);
+        PriceCollection pricing = Price.list(params, requestOptions);
 
         Cost cost = new Cost();
 
