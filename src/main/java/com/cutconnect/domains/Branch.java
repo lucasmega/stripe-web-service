@@ -1,10 +1,10 @@
 package com.cutconnect.domains;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.io.Serializable;
+import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Branch implements Serializable {
@@ -20,6 +20,9 @@ public class Branch implements Serializable {
 
     @OneToOne
     private Address address;
+
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Professional> professionals = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -51,5 +54,13 @@ public class Branch implements Serializable {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public List<Professional> getProfessionals() {
+        return professionals;
+    }
+
+    public void setProfessionals(List<Professional> professionals) {
+        this.professionals = professionals;
     }
 }

@@ -1,13 +1,12 @@
 package com.cutconnect.domains;
 
+import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.io.Serializable;
 
 @Entity
 public class Schedule implements Serializable {
@@ -17,7 +16,7 @@ public class Schedule implements Serializable {
     private String id;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "professional_id")
     private Professional professional;
 
@@ -26,6 +25,8 @@ public class Schedule implements Serializable {
 
     @JsonFormat(pattern = "HH:mm:ss")
     private LocalTime time;
+
+    private String productId;
 
     public String getId() {
         return id;
@@ -57,5 +58,13 @@ public class Schedule implements Serializable {
 
     public void setTime(LocalTime time) {
         this.time = time;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 }

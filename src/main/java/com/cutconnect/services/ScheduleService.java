@@ -1,28 +1,25 @@
 package com.cutconnect.services;
 
-import com.cutconnect.controllers.ScheduleController;
-import com.cutconnect.domains.Professional;
-import com.cutconnect.domains.Schedule;
-import com.cutconnect.domains.User;
 import com.cutconnect.domains.form.ScheduleFromBarbershop;
-import com.cutconnect.domains.form.ScheduleFromProfissional;
 import com.cutconnect.exceptions.BusinessException;
 import com.cutconnect.exceptions.InternalServerError;
-import com.cutconnect.repositories.ProfessionalRepository;
-import com.cutconnect.repositories.ScheduleRepository;
-import com.cutconnect.repositories.UserRepository;
-import com.cutconnect.utils.Util;
 import jakarta.persistence.EntityNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalTime;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.time.LocalTime;
 import java.util.stream.Collectors;
+
+import com.cutconnect.utils.Util;
+import com.cutconnect.domains.User;
+import com.cutconnect.domains.Schedule;
+import com.cutconnect.domains.Professional;
+import com.cutconnect.repositories.UserRepository;
+import com.cutconnect.repositories.ScheduleRepository;
+import com.cutconnect.repositories.ProfessionalRepository;
+import com.cutconnect.domains.form.ScheduleFromProfissional;
 
 @Service
 public class ScheduleService extends Util {
@@ -124,7 +121,7 @@ public class ScheduleService extends Util {
             }
 
             List<Schedule> schedulesDB = scheduleRepository.findScheduleByDate(convertStringToLocalDate(object.getDate()));
-            List<Professional> professionalDB = professionalRepository.findProfessionalsByBarberShopId(user.getBarbershopId());
+            List<Professional> professionalDB = professionalRepository.findProfessionalsByBranchId(user.getBarbershopId());
 
             List<LocalTime> possibleTimes = generatePossibleTimes();
 

@@ -48,7 +48,7 @@ public class ProfessionalService {
 
     private void updateData(Professional professionalDB, Professional professional) {
         professionalDB.setName(professional.getName());
-        professionalDB.setBarberShop(professional.getBarberShop());
+//        professionalDB.setBarberShop(professional.getBarberShop());
     }
 
     public void delete(String id) {

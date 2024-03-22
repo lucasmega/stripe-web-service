@@ -1,6 +1,5 @@
 package com.cutconnect.domains;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,11 +13,6 @@ public class BarberShop implements Serializable {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String name;
-
-    @JsonIgnoreProperties
-    @OneToMany(mappedBy = "barberShop")
-    private List<Professional> professionails = new ArrayList<>();
-
     @OneToMany(mappedBy = "barberShop")
     private List<Branch> branches = new ArrayList<>();
 
@@ -46,14 +40,6 @@ public class BarberShop implements Serializable {
 
     public void setBranches(List<Branch> branches) {
         this.branches = branches;
-    }
-
-    public List<Professional> getProfessionails() {
-        return professionails;
-    }
-
-    public void setProfessionails(List<Professional> professionails) {
-        this.professionails = professionails;
     }
 
     public String getStripeId() {

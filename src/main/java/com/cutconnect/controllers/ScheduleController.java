@@ -3,6 +3,7 @@ package com.cutconnect.controllers;
 import java.util.List;
 import java.time.LocalTime;
 
+import com.cutconnect.domains.form.ScheduleFromBarbershop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cutconnect.domains.Schedule;
 import com.cutconnect.services.ScheduleService;
-import com.cutconnect.domains.form.ScheduleFromBarbershop;
 import com.cutconnect.domains.form.ScheduleFromProfissional;
 
 @RestController

@@ -4,16 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Professional implements Serializable {
     private static final long serialVersionUID = 1L;
     public Professional() { }
-    public Professional(String id, String name, BarberShop barberShop, String position) {
+    public Professional(String id, String name, String position) {
         this.id = id;
         this.name = name;
-        this.barberShop = barberShop;
         this.position = position;
     }
 
@@ -25,10 +25,10 @@ public class Professional implements Serializable {
     @JsonIgnore
     @ManyToOne
     @JoinColumn()
-    private BarberShop barberShop;
+    private Branch branch;
 
-    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Schedule> schedules;
+    @OneToMany(mappedBy = "professional")
+    private List<Schedule> schedules = new ArrayList<>();
 
     public String position;
 
@@ -48,14 +48,12 @@ public class Professional implements Serializable {
         this.name = name;
     }
 
-    public BarberShop getBarberShop() {
-        return barberShop;
+    public Branch getBranch() {
+        return branch;
     }
-
-    public void setBarberShop(BarberShop barberShop) {
-        this.barberShop = barberShop;
+    public void setBranch(Branch branch) {
+        this.branch = branch;
     }
-
     public List<Schedule> getSchedules() {
         return schedules;
     }

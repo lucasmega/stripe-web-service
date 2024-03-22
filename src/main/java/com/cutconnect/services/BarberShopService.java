@@ -52,7 +52,7 @@ public class BarberShopService {
 
     private void updateData(BarberShop barberShopDB, BarberShop barberShop) {
         barberShopDB.setName(barberShop.getName());
-        barberShopDB.setProfessionails(barberShop.getProfessionails());
+//        barberShopDB.setProfessionails(barberShop.getProfessionails());
     }
 
     public void delete(String id) {
